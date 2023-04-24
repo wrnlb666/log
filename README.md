@@ -1,2 +1,2 @@
 # log
-easy use logging library in pure C. 
+User friendly logging library in pure C.
