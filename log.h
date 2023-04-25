@@ -42,7 +42,6 @@
 #define LOG_COLOR_BRIGHT_WHITE      "\033[97m"
 
 
-
 typedef enum log_target_t
 {
     LOG_TIME,
@@ -56,10 +55,9 @@ typedef enum log_target_t
 
 typedef struct log_t
 {
-    // member functions
     void    (*redirect)     ( const FILE* fp );
     void    (*log)          ( const char* line );
-    void    (*printf)         ( const char* format, ... );
+    void    (*printf)       ( const char* format, ... );
     void    (*info)         ( const char* format, ... );
     void    (*warn)         ( const char* format, ... );
     void    (*erro)         ( const char* format, ... );
@@ -67,7 +65,6 @@ typedef struct log_t
     void    (*set_pattern)  ( const char* pattern );
     void    (*prefix)       ( const char* prefix );
     void    (*set_color)    ( log_target_t target, char* color );
-
 } log_t;
 
 

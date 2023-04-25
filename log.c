@@ -559,6 +559,12 @@ void log_set_pattern( const char* pattern )
 void log_set_prefix( const char* prefix )
 {
     size_t length = strlen( prefix );
+    if ( length == 0 )
+    {
+        log_prefix_size = 0;
+        log_prefix[0] = 0;
+        return;
+    }
     length += 2;
     if ( length >= LOG_PREFIX_SIZE )
     {
