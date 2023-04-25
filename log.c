@@ -91,6 +91,14 @@ static void log_init()
 
 void log_redirect( const FILE* fp )
 {
+    #ifndef __GNUC__
+        if ( init == false )
+        {
+            log_init();
+            init = true;
+        }
+    #endif  // __GNUC__
+    
     if ( fp != NULL )
     {
         log_fp = (FILE*) fp;
@@ -547,6 +555,14 @@ void log_compile_pattern( const char* pattern )
 // https://man7.org/linux/man-pages/man3/strftime.3.html
 void log_set_pattern( const char* pattern )
 {
+    #ifndef __GNUC__
+        if ( init == false )
+        {
+            log_init();
+            init = true;
+        }
+    #endif  // __GNUC__
+
     size_t len = strlen( pattern );
     if ( len >= LOG_PATTERN_SIZE )
     {
@@ -558,6 +574,14 @@ void log_set_pattern( const char* pattern )
 
 void log_set_prefix( const char* prefix )
 {
+    #ifndef __GNUC__
+        if ( init == false )
+        {
+            log_init();
+            init = true;
+        }
+    #endif  // __GNUC__
+
     size_t length = strlen( prefix );
     if ( length == 0 )
     {
@@ -577,6 +601,14 @@ void log_set_prefix( const char* prefix )
 
 void log_set_color( log_target_t target, char* color )
 {
+    #ifndef __GNUC__
+        if ( init == false )
+        {
+            log_init();
+            init = true;
+        }
+    #endif  // __GNUC__
+
     if ( strlen(color) != LOG_STRLEN_COLOR )
     {
         fprintf( stderr, "[ERRO]: invalid color. \n" );
