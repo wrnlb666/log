@@ -41,31 +41,11 @@ void log_set_prefix( const char* prefix );
 void log_set_color( log_target_t target, char* color );
 
 #ifndef __GNUC__
-static void log_init()
-{
-    log_prefix_size         = 0;
-    log_fp                  = stderr;
-    log_time_color          = LOG_COLOR_BRIGHT_GREEN;
-    log_text_color          = LOG_COLOR_RESET;
-    log_prefix_color        = LOG_COLOR_BRIGHT_CYAN;
-    log_info_color          = LOG_COLOR_GREEN;
-    log_warn_color          = LOG_COLOR_YELLOW;
-    log_erro_color          = LOG_COLOR_RED;
-    console.redirect        = log_redirect;
-    console.log             = log_println;
-    console.info            = log_info;
-    console.warn            = log_warn;
-    console.erro            = log_erro;
-    console.printf          = log_printf;
-    console.format          = log_compile_pattern;
-    console.set_pattern     = log_set_pattern;
-    console.prefix          = log_set_prefix;
-    console.set_color       = log_set_color;
-    strcpy( log_pattern, "%Y-%m-%d %H:%M:%S" );
-}
+static void log_init( void )
 #else
 __attribute__((constructor))
-static void log_init()
+static void log_init( void )
+#endif  // __GNUC__
 {
     log_prefix_size         = 0;
     log_fp                  = stderr;
@@ -87,7 +67,6 @@ static void log_init()
     console.set_color       = log_set_color;
     strcpy( log_pattern, "%Y-%m-%d %H:%M:%S" );
 }
-#endif  // __GNUC__
 
 void log_redirect( const FILE* fp )
 {
@@ -98,7 +77,7 @@ void log_redirect( const FILE* fp )
             init = true;
         }
     #endif  // __GNUC__
-    
+
     if ( fp != NULL )
     {
         log_fp = (FILE*) fp;
@@ -135,7 +114,7 @@ void log_println( const char* line )
 
         #ifdef _malloca
             buffer = _malloca( cap );
-        #elif defined alloca
+        #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
             buffer = cap <= 1024 ? alloca( cap ) : malloc( cap );
         #else
             buffer = malloc( cap );
@@ -153,7 +132,7 @@ void log_println( const char* line )
 
         #ifdef _malloca
             buffer = _malloca( cap );
-        #elif defined alloca
+        #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
             buffer = cap <= 1024 ? alloca( cap ) : malloc( cap );
         #else
             buffer = malloc( cap );
@@ -166,7 +145,7 @@ void log_println( const char* line )
 
     #ifdef _malloca
         _freea( buffer );
-    #elif defined alloca
+    #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
         if ( cap > 1024 )
         {
             free( buffer );
@@ -207,7 +186,7 @@ void log_printf( const char* format, ...  )
 
         #ifdef _malloca
             buffer = _malloca( cap );
-        #elif defined alloca
+        #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
             buffer = cap <= 1024 ? alloca( cap ) : malloc( cap );
         #else
             buffer = malloc( cap );
@@ -226,7 +205,7 @@ void log_printf( const char* format, ...  )
 
         #ifdef _malloca
             buffer = _malloca( cap );
-        #elif defined alloca
+        #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
             buffer = cap <= 1024 ? alloca( cap ) : malloc( cap );
         #else
             buffer = malloc( cap );
@@ -244,7 +223,7 @@ void log_printf( const char* format, ...  )
 
     #ifdef _malloca
         _freea( buffer );
-    #elif defined alloca
+    #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
         if ( cap > 1024 )
         {
             free( buffer );
@@ -284,7 +263,7 @@ void log_info( const char* format, ...  )
 
         #ifdef _malloca
             buffer = _malloca( cap );
-        #elif defined alloca
+        #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
             buffer = cap <= 1024 ? alloca( cap ) : malloc( cap );
         #else
             buffer = malloc( cap );
@@ -303,7 +282,7 @@ void log_info( const char* format, ...  )
 
         #ifdef _malloca
             buffer = _malloca( cap );
-        #elif defined alloca
+        #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
             buffer = cap <= 1024 ? alloca( cap ) : malloc( cap );
         #else
             buffer = malloc( cap );
@@ -321,7 +300,7 @@ void log_info( const char* format, ...  )
 
     #ifdef _malloca
         _freea( buffer );
-    #elif defined alloca
+    #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
         if ( cap > 1024 )
         {
             free( buffer );
@@ -362,7 +341,7 @@ void log_warn( const char* format, ...  )
 
         #ifdef _malloca
             buffer = _malloca( cap );
-        #elif defined alloca
+        #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
             buffer = cap <= 1024 ? alloca( cap ) : malloc( cap );
         #else
             buffer = malloc( cap );
@@ -381,7 +360,7 @@ void log_warn( const char* format, ...  )
 
         #ifdef _malloca
             buffer = _malloca( cap );
-        #elif defined alloca
+        #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
             buffer = cap <= 1024 ? alloca( cap ) : malloc( cap );
         #else
             buffer = malloc( cap );
@@ -399,7 +378,7 @@ void log_warn( const char* format, ...  )
 
     #ifdef _malloca
         _freea( buffer );
-    #elif defined alloca
+    #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
         if ( cap > 1024 )
         {
             free( buffer );
@@ -439,7 +418,7 @@ void log_erro( const char* format, ...  )
 
         #ifdef _malloca
             buffer = _malloca( cap );
-        #elif defined alloca
+        #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
             buffer = cap <= 1024 ? alloca( cap ) : malloc( cap );
         #else
             buffer = malloc( cap );
@@ -458,7 +437,7 @@ void log_erro( const char* format, ...  )
 
         #ifdef _malloca
             buffer = _malloca( cap );
-        #elif defined alloca
+        #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
             buffer = cap <= 1024 ? alloca( cap ) : malloc( cap );
         #else
             buffer = malloc( cap );
@@ -476,7 +455,7 @@ void log_erro( const char* format, ...  )
 
     #ifdef _malloca
         _freea( buffer );
-    #elif defined alloca
+    #elif defined (__GNUC__) && __has_builtin(__builtin_alloca)
         if ( cap > 1024 )
         {
             free( buffer );

@@ -53,6 +53,7 @@ typedef enum log_target_t
 } log_target_t;
 
 
+#ifndef __GNUC__
 typedef struct log_t
 {
     void    (*redirect)     ( const FILE* fp );
@@ -66,6 +67,21 @@ typedef struct log_t
     void    (*prefix)       ( const char* prefix );
     void    (*set_color)    ( log_target_t target, char* color );
 } log_t;
+#else
+typedef struct log_t
+{
+    void    (*redirect)     ( const FILE* fp );
+    void    (*log)          ( const char* line );
+    void    (*printf)       ( const char* format, ... )     __attribute__(( format( printf, 1, 2 ) ));
+    void    (*info)         ( const char* format, ... )     __attribute__(( format( printf, 1, 2 ) ));
+    void    (*warn)         ( const char* format, ... )     __attribute__(( format( printf, 1, 2 ) ));
+    void    (*erro)         ( const char* format, ... )     __attribute__(( format( printf, 1, 2 ) ));
+    void    (*format)       ( const char* pattern );
+    void    (*set_pattern)  ( const char* pattern );
+    void    (*prefix)       ( const char* prefix );
+    void    (*set_color)    ( log_target_t target, char* color );
+} log_t;
+#endif  // __GNUC__
 
 
 extern log_t console;
