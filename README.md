@@ -7,12 +7,16 @@ User friendly logging library in pure C.
 
 int main( void )
 {
-    console_log.redirect( stdout );
+    console.redirect( stdout );
 
-    console_log.prefix( "wrnlb" );
-    console_log.info( "in%s\n", "fo" );
-    console_log.warn( "xd\n" );
-    console_log.erro( "foo\n" );
+    console.set_color( LOG_PREFIX, LOG_COLOR_BRIGHT_CYAN );
+    console.prefix( "wrnlb" );
+    console.log( "hello" );
+    console.printf( "%s %s", "Hello", "World" );
+
+    console.info( "in%s", "fo" );
+    console.warn( "xd" );
+    console.erro( "foo%d", 5 );
 
     return 0;
 }
